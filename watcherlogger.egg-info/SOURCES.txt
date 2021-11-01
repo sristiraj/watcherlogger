@@ -1,0 +1,10 @@
+setup.py
+watcherlogger/__init__.py
+watcherlogger/log_test.py
+watcherlogger/log_validator.py
+watcherlogger/logger.py
+watcherlogger.egg-info/PKG-INFO
+watcherlogger.egg-info/SOURCES.txt
+watcherlogger.egg-info/dependency_links.txt
+watcherlogger.egg-info/requires.txt
+watcherlogger.egg-info/top_level.txt
