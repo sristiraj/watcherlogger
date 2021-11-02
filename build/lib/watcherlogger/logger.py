@@ -1,6 +1,3 @@
-from __future__ import annotations
-from abc import ABC, abstractmethod
-from typing import Any
 import watchtower
 import json
 import logging
@@ -9,8 +6,10 @@ import os
 from datetime import datetime
 parent_dir_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent_dir_name)
-from .log_validator import validator
-
+try:
+    from .log_validator import validator
+except Exception as e:
+    from log_validator import validator
 
 class watcherlogger(object):
 
