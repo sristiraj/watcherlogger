@@ -1,3 +1,4 @@
+README.md
 setup.py
 watcherlogger/__init__.py
 watcherlogger/log_test.py

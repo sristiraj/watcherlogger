@@ -13,8 +13,9 @@ setup(name='watcherlogger',
       url='',
       packages=find_packages(include=['watcherlogger', 'watcherlogger.*']),
       package_data={
-        'sample': ['package_data.dat'],
+        'watcherlogger': ['resources/config.json','resources/config.yaml'],
       },
+      include_package_data =True,
       install_requires=[
           'jsonschema','watchtower','requests'
       ],
