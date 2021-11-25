@@ -1,15 +1,22 @@
+from __future__ import annotations
+from abc import ABC, abstractmethod
+from typing import Any
 import watchtower
 import json
 import logging
 import sys
 import os
 from datetime import datetime
-parent_dir_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+import uuid
+
+
+parent_dir_name = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(parent_dir_name)
 try:
     from .log_validator import validator
 except Exception as e:
     from log_validator import validator
+
 
 class watcherlogger(object):
 
@@ -19,6 +26,8 @@ class watcherlogger(object):
         self._log_level = logging.ERROR
         self._stream_name = __name__ +"-"+datetime.now().strftime("%Y%m%D%H%M%S")
         self._logger = logging.getLogger()
+        self._run_id = ""
+        self._uuid = str(uuid.uuid4())
         if self._logger.handlers:
             for handler in self._logger.handlers:
                 self._logger.removeHandler(handler)
@@ -46,14 +55,56 @@ class watcherlogger(object):
             return self._watcherlogger
 
     def info(self, data):
+        if data.get("run_id",None) is None:
+            data["run_id"] = self._run_id
+        data["uuid"] = self._uuid    
+        data["internal_process_name"]="watchtowerlogger"   
+        data["internal_process_status"] = "info" 
         validator(data)
         self._logger.info(data)
 
     def error(self, data):
+        if data.get("run_id",None) is None:
+            data["run_id"] = self._run_id
+        data["uuid"] = self._uuid      
+        data["internal_process_name"]="watchtowerlogger"   
+        data["internal_process_status"] = "error"     
         self._logger.error(data)
 
     def debug(self, data):
+        if data.get("run_id",None) is None:
+            data["run_id"] = self._run_id
+        data["uuid"] = self._uuid      
+        data["internal_process_name"]="watchtowerlogger"   
+        data["internal_process_status"] = "debug"      
         self._logger.debug(data)    
+
+    def start(self, data):
+        if data.get("run_id",None) is None:
+            data["run_id"] = self._run_id
+        data["uuid"] = self._uuid      
+        data["internal_process_name"]="watchtowerlogger"   
+        data["internal_process_status"] = "start" 
+        validator(data)     
+        self._logger.info(data)    
+
+    def success(self, data):
+        if data.get("run_id",None) is None:
+            data["run_id"] = self._run_id
+        data["uuid"] = self._uuid      
+        data["internal_process_name"]="watchtowerlogger"   
+        data["internal_process_status"] = "success"   
+        validator(data)
+        self._logger.info(data) 
+
+    def failure(self, data):
+        if data.get("run_id",None) is None:
+            data["run_id"] = self._run_id
+        data["uuid"] = self._uuid      
+        data["internal_process_name"]="watchtowerlogger"   
+        data["internal_process_status"] = "failure"  
+        validator(data)    
+        self._logger.info(data) 
 
 if __name__ == "__main__":
     logger = watcherlogger().Builder().setLogLevel(logging.INFO).setStreamNamePrefix("test_log").getOrCreate()
@@ -61,4 +112,4 @@ if __name__ == "__main__":
     print(logger._stream_name)
     print(logger._log_group)
     
-    logger.info({"service_arn":"test","module_name":"app","job_type":"test"})
+    logger.success({"service_arn":"test","module_name":"app","job_type":"test"})
