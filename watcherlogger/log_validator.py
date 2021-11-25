@@ -1,17 +1,27 @@
 from jsonschema import validate, ValidationError
 import json
 import logging
-import os
 
-schema_data = '''
-{
+
+schema_data = '''{
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "WatcherLogger",
     "description": "A product from logging",
     "type": "object",
      
     "properties": {
-     
+       "run_id": {
+          "description": "The unique run identifier for a service",
+          "type": "string"
+       },
+       "internal_process_name": {
+          "description": "The status description",
+          "type": "string"
+       }, 
+       "internal_process_status": {
+          "description": "The status description",
+          "type": "string"
+       }, 
        "service_arn": {
           "description": "The unique identifier for a service",
           "type": "string"
@@ -88,13 +98,12 @@ schema_data = '''
         } 
     },
      
-    "required": ["service_arn", "module_name", "job_type"]
- }
-'''
+    "required": ["run_id", "service_arn", "module_name", "job_type"]
+ }'''
+
 logger = logging.getLogger(__name__)
 def validator(log_data):
-    
-    # with open(os.path.dirname(os.path.realpath(__file__))+"/resources/config.json".replace("/",os.path.sep)) as file:
+    # with open("resources/config.json") as file:
     #     schema_data = file.read()
     #schema for log from json config under resources/config.json
     schema = json.loads(schema_data)    
